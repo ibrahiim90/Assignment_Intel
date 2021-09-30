@@ -1,0 +1,62 @@
+import pandas as pd
+import random
+class Design:
+    def __init__(self,nos,noi):
+        self.nos = nos
+        self.noi = noi
+
+    #function to assign the cordinates to a shape
+    def pos(self,boundary):
+        x_min = min(boundary[0],boundary[2])
+        y_min = min(boundary[1],boundary[3])
+        x_max = max(boundary[0],boundary[2])
+        y_max = max(boundary[1],boundary[3])
+        x1 = random.randrange(x_min,x_max)
+        y1 = random.randrange(y_min,y_max)
+        x2 = random.randrange(x_min,x_max)
+        y2 = random.randrange(y_min,y_max)
+        return(x1,y1,x2,y2)
+
+    #function to generate and return a shape list -->> contains name, area and location of the Shape
+    def shapeList(self,boundary):
+        shapeList = []
+        for x in range(0,self.nos):
+            area = 0
+            while area <=0:                     #loop to ensure a valid rectangle is generated
+                rectangle=self.pos(boundary)
+                height = abs((rectangle[3]-rectangle[1]))
+                width = abs((rectangle[0]-rectangle[2]))
+                area = height*width
+            Corner_1 = ((rectangle[0],rectangle[1]))
+            Corner_2 = ((rectangle[2], rectangle[3]))
+            shapeList.append((('Rectangle ' + str(x+1)),area,Corner_1,Corner_2))
+        return shapeList
+
+    #function to sort and format the generated data
+    def data(self,boundary):
+        design_list = self.shapeList(boundary)
+        design_list.sort(key=lambda x: x[1], reverse=True)
+        if self.noi>0:
+           self.instance(boundary)
+        return pd.DataFrame(design_list, columns=['Shape Name', 'Area','corner_1', 'corner_2'])
+
+    #function to call instances
+    def instance(self,boundary):
+        for instance in range(0,self.noi):
+            i_boundary = self.pos(boundary)
+            print('Boundary of Instance ' + str(instance+1) + ':', i_boundary)
+            nos = random.randrange(1, 10)       #randomnly assigning number of shapes in instance
+            noi = 0
+            i = Design(nos, noi)
+            print(i.data(i_boundary))
+        return 0
+
+
+boundary = (0,0,100,100)                      #Boundary of the Design
+nos=random.randrange(1,10)                    #randomnly assigning number of shapes in Design D1
+noi=random.randrange(1,10)                    #randomnly assigning number of instances in Design D1
+
+d1=Design(nos,noi)
+list=d1.data(boundary)                       #function to generate design data and store the data in a list
+print('Boundary of the Design Object:', boundary)
+print(list)

@@ -24,6 +24,7 @@ class Design:
             area = 0
             while area <=0:                     #loop to ensure a valid rectangle is generated
                 rectangle=self.pos(boundary)
+                rectangle = self.sort_boundary(rectangle)
                 height = abs((rectangle[3]-rectangle[1]))
                 width = abs((rectangle[0]-rectangle[2]))
                 area = height*width
@@ -44,12 +45,21 @@ class Design:
     def instance(self,boundary):
         for instance in range(0,self.noi):
             i_boundary = self.pos(boundary)
-            print('Boundary of Instance ' + str(instance+1) + ':', i_boundary)
+            sorted_boundary = self.sort_boundary(i_boundary)
+            print('Boundary of Instance ' + str(instance+1) + ':', sorted_boundary)
             nos = random.randrange(1, 10)       #randomnly assigning number of shapes in instance
             noi = 0
             i = Design(nos, noi)
             print(i.data(i_boundary))
         return 0
+        
+    #Function to re-arrange boundary data
+    def sort_boundary(self,i_boundary):
+        x_min = min(i_boundary[0],i_boundary[2])
+        y_min = min(i_boundary[1],i_boundary[3])
+        x_max = max(i_boundary[0],i_boundary[2])
+        y_max = max(i_boundary[1],i_boundary[3])
+        return [x_min, y_min, x_max, y_max]
 
 
 boundary = (0,0,100,100)                      #Boundary of the Design

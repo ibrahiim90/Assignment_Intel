@@ -11,23 +11,25 @@ class Design:
         y_min = min(boundary[1],boundary[3])
         x_max = max(boundary[0],boundary[2])
         y_max = max(boundary[1],boundary[3])
-        x1 = random.randrange(x_min,x_max)
-        y1 = random.randrange(y_min,y_max)
-        x2 = random.randrange(x_min,x_max)
-        y2 = random.randrange(y_min,y_max)
+        
+        #a check to ensure the function random.sample(range(),n) dont run out of range
+        if x_max-x_min == 2 or y_max-y_min == 2:
+            n=1
+        else:
+            n=2
+        x1,x2 = random.sample(range(x_min, x_max,n), 2)
+        y1,y2 = random.sample(range(y_min, y_max,n), 2)
         return(x1,y1,x2,y2)
 
     #function to generate and return a shape list -->> contains name, area and location of the Shape
     def shapeList(self,boundary):
         shapeList = []
         for x in range(0,self.nos):
-            area = 0
-            while area <=0:                     #loop to ensure a valid rectangle is generated
-                rectangle=self.pos(boundary)
-                rectangle = self.sort_boundary(rectangle)
-                height = abs((rectangle[3]-rectangle[1]))
-                width = abs((rectangle[0]-rectangle[2]))
-                area = height*width
+            rectangle=self.pos(boundary)
+            rectangle = self.sort_boundary(rectangle)
+            height = abs((rectangle[3]-rectangle[1]))
+            width = abs((rectangle[0]-rectangle[2]))
+            area = height*width
             Corner_1 = ((rectangle[0],rectangle[1]))
             Corner_2 = ((rectangle[2], rectangle[3]))
             shapeList.append((('Rectangle ' + str(x+1)),area,Corner_1,Corner_2))
@@ -50,8 +52,9 @@ class Design:
             nos = random.randrange(1, 10)       #randomnly assigning number of shapes in instance
             noi = 0
             i = Design(nos, noi)
-            print(i.data(i_boundary))
-        return 0
+            i_data = i.data(i_boundary)
+            print(i_data)
+        return i_data
         
     #Function to re-arrange boundary data
     def sort_boundary(self,i_boundary):

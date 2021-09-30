@@ -1,0 +1,91 @@
+import random
+import pandas as pd
+class Design:
+    def __init__(self,boundary,nos,noi,resolution):
+         self.boundary = boundary
+         self.nos = nos
+         self.noi = noi
+         self.resolution = resolution
+
+def list_points(self):
+        x_min = min(self.boundary[0],self.boundary[2])
+        y_min = min(self.boundary[1],self.boundary[3])
+        x_max = max(self.boundary[0],self.boundary[2])
+        y_max = max(self.boundary[1],self.boundary[3])
+        x_list = []
+        y_list = []
+        points_list = []
+        x_list.append(x_min)
+        y_list.append(y_min)
+        range_x = abs(x_max-x_min)+1
+        range_y = abs(y_max-y_min)+1
+        resolution = self.resolution
+
+        for x in range(0,range_x):
+            x_list.append(x_list[x]+resolution)
+        for y in range(0,range_y):
+            y_list.append(y_list[y]+resolution)
+
+        for x in range(0,range_x):
+            for y in range(0,range_y):
+                value = x_list[x],y_list[y]
+                points_list.append(value)
+
+        return points_list
+
+    def Area(self,shape):
+        width = shape[0]-shape[2]
+        height = shape[1]-shape[3]
+        return abs(width*height)
+
+    def shape(self,call):
+        data_list=self.list_points()
+        shape_List = []
+
+        for x in range(0,self.nos):
+            origin = random.choice(data_list)
+            data_list.remove(origin)
+            corner = random.choice(data_list)
+            while (origin[0] is corner [0]) or (origin[1] is corner [1]):       #loop to ensure a valid rectangle is being generated
+                corner = random.choice(data_list)
+            data_list.remove(corner)
+            shape = origin + corner
+            if call is True:
+                call = False
+                return shape
+            rectangle = self.Area(shape)
+            shape_List.append(('rectangle_'+str(x + 1),origin,corner,rectangle))
+        return shape_List
+
+    def data(self):
+        call = False
+        design_list = self.shape(call)
+        design_list.sort(key=lambda x: x[3], reverse=True)
+        return pd.DataFrame(design_list, columns=['Shape Name', 'corner_1', 'corner_2', 'Area'])
+
+
+    def instance(self):
+        call=True
+        i_boundary= self.shape(call)
+        return i_boundary
+
+
+
+boundary = (0,0,100,100)
+resolution = 1
+numberOfShapes = random.randrange(1,10)
+numberOfInstance = random.randrange(1,10)
+
+d1=Design(boundary,numberOfShapes,numberOfInstance,resolution)
+print('Boundary of Design Object:', boundary)
+print(d1.data())
+
+if numberOfInstance > 0:
+    for x in range(0,numberOfInstance):
+        i_boundary = d1.instance()
+        print('Boundary of Instance '+str(x+1)+': ' ,i_boundary)
+        i_resolution = 1
+        i_numberOfShapes = random.randrange(1,10)
+        i_numberOfInstance = 0
+        i = Design(i_boundary, i_numberOfShapes, i_numberOfInstance, i_resolution)
+        print(i.data())
